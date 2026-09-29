@@ -36,12 +36,21 @@ class TranscriptRecorder:
         speaker = self.agent_name if role == "assistant" else "Caller"
         timestamp = datetime.now().strftime("%H:%M:%S")
 
-        self.turns.append({
+        turn_data = {
             "timestamp": timestamp,
             "role": role,
             "speaker": speaker,
             "text": text,
-        })
+            "time_ms": int(datetime.now().timestamp() * 1000)
+        }
+        self.turns.append(turn_data)
+
+        # Broadcast live turn for real-time Avatar UI lip-sync and dialogue display
+        try:
+            live_turn_path = TRANSCRIPTS_DIR / "live_turn.json"
+            live_turn_path.write_text(json.dumps(turn_data, ensure_ascii=False), encoding="utf-8")
+        except Exception:
+            pass
 
     def save(self) -> Optional[Path]:
         """Save the conversation transcript to both a Markdown file and master JSONL log."""

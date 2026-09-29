@@ -194,3 +194,8 @@ pronunciation_map:
 | *"Can you tell me about your pricing plans?"* | Queries the indexed documents via vector search (`search_knowledge_base`) and summarizes the answer concisely. |
 | *"I'd like to schedule a callback regarding enterprise service."* | Collects the caller's contact details and logs an inquiry (`capture_inquiry`). |
 | *"I need to speak with a human supervisor."* | Initiates the escalation workflow and logs a support ticket (`escalate_to_human`). |
+---
+
+## 🛡️ License
+
+This project is licensed under the [MIT License](LICENSE) — feel free to modify and adapt it for your own business or applications.

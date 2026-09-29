@@ -77,10 +77,28 @@ async def entrypoint(ctx: agents.JobContext):
         ),
     )
 
+    try:
+        from avatar_agent_ui.sync_server import avatar_sync
+        avatar_sync.ensure_started()
+    except Exception:
+        avatar_sync = None
+
+    @session.on("agent_state_changed")
+    def on_agent_state_changed(ev):
+        if avatar_sync and hasattr(ev, "new_state"):
+            avatar_sync.notify_agent_state(ev.new_state)
+
+    @session.on("user_input_transcribed")
+    def on_user_transcribed(ev):
+        if avatar_sync and hasattr(ev, "transcript") and ev.transcript:
+            avatar_sync.notify_user_speech(ev.transcript, getattr(ev, "is_final", True))
+
     @session.on("conversation_item_added")
     def on_item_added(ev):
         if hasattr(ev, "item") and ev.item:
             recorder.add_message(ev.item.role, ev.item.text_content)
+            if avatar_sync:
+                avatar_sync.notify_conversation_item(ev.item.role, ev.item.text_content)
 
     @session.on("close")
     def on_session_close(ev):
@@ -90,8 +108,15 @@ async def entrypoint(ctx: agents.JobContext):
     async def on_shutdown():
         # Ensure any messages in session history are captured
         if hasattr(session, "history") and session.history:
-            for msg in session.history.messages:
-                recorder.add_message(msg.role, msg.text_content)
+            try:
+                hist = getattr(session.history, "messages", None)
+                msgs = hist() if callable(hist) else (hist or [])
+                for msg in msgs:
+                    role = getattr(msg, "role", "unknown")
+                    text = getattr(msg, "text_content", str(msg))
+                    recorder.add_message(role, text)
+            except Exception:
+                pass
         recorder.save()
 
     await session.start(agent=VoiceAssistantAgent(), room=ctx.room)

@@ -31,5 +31,17 @@ dependencies = [
     "pydantic-settings",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+]
+
 [tool.hatch.build.targets.wheel]
 packages = ["langchain_agent", "voice_agent"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["evals"]
+python_files = ["test_*.py"]
+pythonpath = ["."]

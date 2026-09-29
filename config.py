@@ -1,7 +1,11 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 import yaml
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+# Ensure .env is loaded into os.environ for LangChain/LangSmith and submodules
+load_dotenv()
 
 
 class Settings(BaseSettings):
@@ -36,7 +40,7 @@ class Settings(BaseSettings):
     stt_model: str = "deepgram/nova-3"
     stt_language: str = "multi"
     tts_model: str = "inworld/inworld-tts-2"
-    tts_voice: str = "Dennis"
+    tts_voice: str = "Ashley"
 
 
 settings = Settings()

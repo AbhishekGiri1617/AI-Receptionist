@@ -1,0 +1,221 @@
+{
+  "timestamp": "2026-09-29_15-18-36",
+  "total_cases": 9,
+  "passed": 9,
+  "pass_rate": 100.0,
+  "average_latency_sec": 1.79,
+  "results": [
+    {
+      "id": "faq_office_location",
+      "category": "knowledge_base",
+      "input": "Where is your office located?",
+      "expected_tool": "search_knowledge_base",
+      "tools_called": [
+        "search_knowledge_base"
+      ],
+      "tool_passed": true,
+      "final_speech": "Our office is at Shivnath Business Centre in Raipur, Chhattisgarh, India.",
+      "voice_eval": {
+        "passed": true,
+        "sentence_count": 1,
+        "is_concise": true,
+        "has_markdown": false,
+        "has_urls": false,
+        "markdown_violations": []
+      },
+      "missing_keywords": [],
+      "forbidden_found": [],
+      "content_passed": true,
+      "elapsed_sec": 2.53,
+      "passed": true
+    },
+    {
+      "id": "faq_whalexy_info",
+      "category": "knowledge_base",
+      "input": "Can you tell me what Whalexy is and how it works?",
+      "expected_tool": "search_knowledge_base",
+      "tools_called": [
+        "search_knowledge_base"
+      ],
+      "tool_passed": true,
+      "final_speech": "Whalexy is a WhatsApp Business API platform that lets businesses run broadcasts, chat‑bots, automated follow‑ups and a shared team inbox all from one dashboard. You simply connect your WhatsApp number, set up templates or no‑code flows, and the system handles bulk messaging, routing and analytics for you.",
+      "voice_eval": {
+        "passed": true,
+        "sentence_count": 2,
+        "is_concise": true,
+        "has_markdown": false,
+        "has_urls": false,
+        "markdown_violations": []
+      },
+      "missing_keywords": [],
+      "forbidden_found": [],
+      "content_passed": true,
+      "elapsed_sec": 2.05,
+      "passed": true
+    },
+    {
+      "id": "stt_mishearing_whalexy",
+      "category": "stt_robustness",
+      "input": "I want to know about the whale xc platform for my business.",
+      "expected_tool": "search_knowledge_base",
+      "tools_called": [
+        "search_knowledge_base"
+      ],
+      "tool_passed": true,
+      "final_speech": "Whalexy is our WhatsApp Business API platform that lets you broadcast messages, automate replies, run chat‑bots and manage team conversations all from a single dashboard, with ready‑made use‑cases for retail, real‑estate, education, clinics and more. It’s designed to help businesses streamline customer engagement and boost sales on WhatsApp.",
+      "voice_eval": {
+        "passed": true,
+        "sentence_count": 2,
+        "is_concise": true,
+        "has_markdown": false,
+        "has_urls": false,
+        "markdown_violations": []
+      },
+      "missing_keywords": [],
+      "forbidden_found": [],
+      "content_passed": true,
+      "elapsed_sec": 1.74,
+      "passed": true
+    },
+    {
+      "id": "lead_book_demo",
+      "category": "inquiry_capture",
+      "input": "I would like to book a demo for Whalexy. My name is Priya Sharma and my phone number is 9876543210.",
+      "expected_tool": "capture_inquiry",
+      "tools_called": [
+        "capture_inquiry"
+      ],
+      "tool_passed": true,
+      "final_speech": "You're all set, Priya; our team will reach out soon to schedule your Whalexy demo.",
+      "voice_eval": {
+        "passed": true,
+        "sentence_count": 1,
+        "is_concise": true,
+        "has_markdown": false,
+        "has_urls": false,
+        "markdown_violations": []
+      },
+      "missing_keywords": [],
+      "forbidden_found": [],
+      "content_passed": true,
+      "elapsed_sec": 1.34,
+      "passed": true
+    },
+    {
+      "id": "lead_request_callback",
+      "category": "inquiry_capture",
+      "input": "Can someone from your sales team call me back? I am Rajesh, email is rajesh@example.com.",
+      "expected_tool": "capture_inquiry",
+      "tools_called": [
+        "capture_inquiry"
+      ],
+      "tool_passed": true,
+      "final_speech": "Sure thing, Rajesh—our sales team will reach out to you shortly at your email.",
+      "voice_eval": {
+        "passed": true,
+        "sentence_count": 1,
+        "is_concise": true,
+        "has_markdown": false,
+        "has_urls": false,
+        "markdown_violations": []
+      },
+      "missing_keywords": [],
+      "forbidden_found": [],
+      "content_passed": true,
+      "elapsed_sec": 1.34,
+      "passed": true
+    },
+    {
+      "id": "escalate_angry_caller",
+      "category": "escalation",
+      "input": "Your service has been terrible and I want to speak to a real human manager right now.",
+      "expected_tool": "escalate_to_human",
+      "tools_called": [
+        "escalate_to_human"
+      ],
+      "tool_passed": true,
+      "final_speech": "I’m sorry you’ve had a poor experience; I’ve escalated your request and a manager will be with you shortly.",
+      "voice_eval": {
+        "passed": true,
+        "sentence_count": 1,
+        "is_concise": true,
+        "has_markdown": false,
+        "has_urls": false,
+        "markdown_violations": []
+      },
+      "missing_keywords": [],
+      "forbidden_found": [],
+      "content_passed": true,
+      "elapsed_sec": 1.52,
+      "passed": true
+    },
+    {
+      "id": "escalate_explicit_agent_request",
+      "category": "escalation",
+      "input": "Could you please transfer me to a human representative?",
+      "expected_tool": "escalate_to_human",
+      "tools_called": [
+        "escalate_to_human"
+      ],
+      "tool_passed": true,
+      "final_speech": "Sure, I’ve escalated your request and a human representative will be with you shortly.",
+      "voice_eval": {
+        "passed": true,
+        "sentence_count": 1,
+        "is_concise": true,
+        "has_markdown": false,
+        "has_urls": false,
+        "markdown_violations": []
+      },
+      "missing_keywords": [],
+      "forbidden_found": [],
+      "content_passed": true,
+      "elapsed_sec": 1.22,
+      "passed": true
+    },
+    {
+      "id": "chitchat_greeting",
+      "category": "chitchat",
+      "input": "Hello, good morning! Who am I speaking with?",
+      "expected_tool": null,
+      "tools_called": [],
+      "tool_passed": true,
+      "final_speech": "Good morning! This is Abhishek from Mobius Bloom, how can I help you today?",
+      "voice_eval": {
+        "passed": true,
+        "sentence_count": 2,
+        "is_concise": true,
+        "has_markdown": false,
+        "has_urls": false,
+        "markdown_violations": []
+      },
+      "missing_keywords": [],
+      "forbidden_found": [],
+      "content_passed": true,
+      "elapsed_sec": 0.61,
+      "passed": true
+    },
+    {
+      "id": "out_of_scope_weather",
+      "category": "safety",
+      "input": "What is the weather in New York right now?",
+      "expected_tool": null,
+      "tools_called": [],
+      "tool_passed": true,
+      "final_speech": "I’m sorry, I don’t have that information. How can I assist you with Mobius BLoom today?",
+      "voice_eval": {
+        "passed": true,
+        "sentence_count": 2,
+        "is_concise": true,
+        "has_markdown": false,
+        "has_urls": false,
+        "markdown_violations": []
+      },
+      "missing_keywords": [],
+      "forbidden_found": [],
+      "content_passed": true,
+      "elapsed_sec": 3.8,
+      "passed": true
+    }
+  ]
+}

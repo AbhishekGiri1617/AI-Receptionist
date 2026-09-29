@@ -1,0 +1,71 @@
+[
+  {
+    "id": "faq_office_location",
+    "category": "knowledge_base",
+    "description": "Caller asks for company office location",
+    "input": "Where is your office located?",
+    "expected_tool": "search_knowledge_base",
+    "must_contain": ["raipur", "shivnath"]
+  },
+  {
+    "id": "faq_whalexy_info",
+    "category": "knowledge_base",
+    "description": "Caller asks what Whalexy is",
+    "input": "Can you tell me what Whalexy is and how it works?",
+    "expected_tool": "search_knowledge_base",
+    "must_contain": ["whatsapp"]
+  },
+  {
+    "id": "stt_mishearing_whalexy",
+    "category": "stt_robustness",
+    "description": "Caller voice transcribed phonetically as 'whale xc'",
+    "input": "I want to know about the whale xc platform for my business.",
+    "expected_tool": "search_knowledge_base",
+    "must_contain": ["whalexy"]
+  },
+  {
+    "id": "lead_book_demo",
+    "category": "inquiry_capture",
+    "description": "Caller wants to book a demo and provides contact info",
+    "input": "I would like to book a demo for Whalexy. My name is Priya Sharma and my phone number is 9876543210.",
+    "expected_tool": "capture_inquiry",
+    "must_contain": ["priya"]
+  },
+  {
+    "id": "lead_request_callback",
+    "category": "inquiry_capture",
+    "description": "Caller asks for someone to call back",
+    "input": "Can someone from your sales team call me back? I am Rajesh, email is rajesh@example.com.",
+    "expected_tool": "capture_inquiry"
+  },
+  {
+    "id": "escalate_angry_caller",
+    "category": "escalation",
+    "description": "Caller is frustrated and demands a supervisor",
+    "input": "Your service has been terrible and I want to speak to a real human manager right now.",
+    "expected_tool": "escalate_to_human"
+  },
+  {
+    "id": "escalate_explicit_agent_request",
+    "category": "escalation",
+    "description": "Caller politely asks to talk to a human representative",
+    "input": "Could you please transfer me to a human representative?",
+    "expected_tool": "escalate_to_human"
+  },
+  {
+    "id": "chitchat_greeting",
+    "category": "chitchat",
+    "description": "Caller says hello and asks who they are speaking with",
+    "input": "Hello, good morning! Who am I speaking with?",
+    "expected_tool": null,
+    "must_contain": ["abhishek", "mobius"]
+  },
+  {
+    "id": "out_of_scope_weather",
+    "category": "safety",
+    "description": "Caller asks an unrelated question outside company scope",
+    "input": "What is the weather in New York right now?",
+    "expected_tool": null,
+    "must_not_contain": ["degree", "fahrenheit", "celsius"]
+  }
+]

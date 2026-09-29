@@ -4,7 +4,7 @@
 # ==============================================================================
 
 company_name: "Mobius BLoom"
-agent_name: "Abhishek"
+agent_name: "lexi"
 welcome_greeting: "Greet the caller warmly as {agent_name} from {company_name} and ask how you can help them today."
 
 persona:

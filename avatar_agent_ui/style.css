@@ -1,0 +1,401 @@
+/* ==============================================================================
+   Piper Fullscreen Live Voice Avatar & Dialogue HUD
+   ============================================================================== */
+
+:root {
+  --sf-blue: #0176d3;
+  --sf-blue-hover: #015ba6;
+  --sf-green: #10b981;
+  --sf-amber: #f59e0b;
+  --sf-text-main: #0f172a;
+  --sf-text-muted: #64748b;
+  --sf-border: rgba(226, 232, 240, 0.8);
+  --sf-glass-bg: rgba(255, 255, 255, 0.86);
+  --sf-glass-border: rgba(255, 255, 255, 0.9);
+  --sf-shadow-lg: 0 16px 48px -8px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+html, body.fullscreen-mode {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background: #000;
+  color: var(--sf-text-main);
+}
+
+/* ==============================================================================
+   Fullscreen Avatar Stage
+   ============================================================================== */
+
+.avatar-stage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background: linear-gradient(180deg, #74aef0 0%, #b1d4fc 40%, #e6f1fe 100%);
+}
+
+#avatarCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.stage-lighting-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 25%, transparent 55%, rgba(1, 118, 211, 0.1) 100%);
+}
+
+/* ==============================================================================
+   Top Floating HUD Bar
+   ============================================================================== */
+
+.fullscreen-hud-top {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.hud-pill {
+  pointer-events: auto;
+  background: var(--sf-glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--sf-glass-border);
+  padding: 7px 18px;
+  border-radius: 9999px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+}
+
+.hud-branding {
+  padding: 6px 16px 6px 12px;
+}
+
+.agent-avatar-icon {
+  font-size: 18px;
+}
+
+.branding-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.agent-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.agent-role {
+  font-size: 11px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+/* Voice Status Center Pill */
+.voice-status-pill {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.voice-status-pill.speaking {
+  background: var(--sf-blue);
+  color: #ffffff;
+  border-color: var(--sf-blue);
+  box-shadow: 0 6px 24px rgba(1, 118, 211, 0.35);
+}
+
+.voice-status-pill.customer-talking {
+  background: #059669;
+  color: #ffffff;
+  border-color: #059669;
+  box-shadow: 0 6px 24px rgba(5, 150, 105, 0.35);
+}
+
+/* Speaking Wave Bars in HUD */
+.speaking-wave-bars {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 16px;
+  margin-left: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.speaking-wave-bars.active {
+  opacity: 1;
+}
+
+.speaking-wave-bars .bar {
+  width: 3px;
+  height: 5px;
+  background: currentColor;
+  border-radius: 2px;
+  animation: audioBarWave 0.75s ease-in-out infinite alternate;
+}
+
+.speaking-wave-bars .bar:nth-child(2) { animation-delay: 0.12s; }
+.speaking-wave-bars .bar:nth-child(3) { animation-delay: 0.24s; }
+.speaking-wave-bars .bar:nth-child(4) { animation-delay: 0.36s; }
+.speaking-wave-bars .bar:nth-child(5) { animation-delay: 0.18s; }
+
+@keyframes audioBarWave {
+  0% { height: 4px; }
+  100% { height: 16px; }
+}
+
+/* Connection Pill */
+.connection-status-pill {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.connection-status-pill.connected {
+  color: #065f46;
+  background: rgba(236, 253, 245, 0.92);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sf-amber);
+  animation: pulseDot 1.4s infinite alternate;
+}
+
+.connection-status-pill.connected .status-dot {
+  background: var(--sf-green);
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.9); opacity: 0.6; }
+  100% { transform: scale(1.15); opacity: 1; }
+}
+
+/* ==============================================================================
+   Floating Glass Dialogue HUD (Subtitles / Live Conversation)
+   ============================================================================== */
+
+.dialogue-hud-overlay {
+  position: absolute;
+  bottom: 34px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 48px);
+  max-width: 720px;
+  background: var(--sf-glass-bg);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid var(--sf-glass-border);
+  border-radius: 18px;
+  box-shadow: var(--sf-shadow-lg);
+  padding: 14px 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  max-height: 250px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dialogue-hud-overlay.minimized {
+  max-height: 48px;
+  overflow: hidden;
+  padding: 10px 20px;
+}
+
+.dialogue-hud-overlay.minimized .conversation-stream {
+  display: none;
+}
+
+.dialogue-hud-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.hud-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: #64748b;
+}
+
+.turn-count {
+  font-size: 11px;
+  color: #94a3b8;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+
+.btn-toggle-hud {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #94a3b8;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.btn-toggle-hud:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #334155;
+}
+
+/* Conversation Stream */
+.conversation-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  max-height: 180px;
+  padding-right: 6px;
+}
+
+.conversation-stream::-webkit-scrollbar {
+  width: 5px;
+}
+.conversation-stream::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 16px 8px;
+  font-size: 13.5px;
+  color: #64748b;
+}
+
+.empty-state code {
+  background: #eff6ff;
+  color: var(--sf-blue);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 12.5px;
+}
+
+/* Dialogue Turn Cards */
+.dialogue-turn {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 9px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 1.45;
+  animation: turnFade 0.2s ease;
+}
+
+@keyframes turnFade {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.turn-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.speaker-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.turn-time {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.customer-turn {
+  background: rgba(241, 245, 249, 0.85);
+  border-left: 3.5px solid #0284c7;
+}
+
+.customer-turn .speaker-badge {
+  color: #0369a1;
+}
+
+.customer-turn .turn-content {
+  color: #1e293b;
+  font-style: italic;
+}
+
+.ai-turn {
+  background: rgba(240, 247, 255, 0.9);
+  border-left: 3.5px solid var(--sf-blue);
+}
+
+.ai-turn.speaking-now {
+  box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.3);
+}
+
+.ai-turn .speaker-badge {
+  color: var(--sf-blue);
+}
+
+.ai-turn .turn-content {
+  color: #0f172a;
+}
+
+/* Footer Hint */
+.hud-footer-hint {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: rgba(100, 116, 139, 0.85);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.hud-footer-hint code {
+  color: #334155;
+  font-weight: 600;
+}

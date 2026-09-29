@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Piper - Fullscreen Live Voice Avatar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="fullscreen-mode">
+  <!-- Fullscreen Avatar Stage Canvas -->
+  <div class="avatar-stage">
+    <canvas id="avatarCanvas"></canvas>
+    <div class="stage-lighting-overlay"></div>
+  </div>
+
+  <!-- Top Floating HUD Bar -->
+  <header class="fullscreen-hud-top">
+    <div class="hud-pill hud-branding">
+      <span class="agent-avatar-icon">✨</span>
+      <div class="branding-text">
+        <span class="agent-name" id="agentTitle">Lexi</span>
+
+      </div>
+    </div>
+
+    <!-- Center Dynamic Speaking Status -->
+    <div class="hud-pill voice-status-pill" id="voiceStatusPill">
+      <span class="pill-icon" id="pillIcon">🎙️</span>
+      <span class="pill-label" id="pillLabel">Voice Agent Ready</span>
+
+      <!-- Speaking Wave Bars -->
+      <div class="speaking-wave-bars" id="speakingWave">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+    </div>
+
+    <!-- Right LiveKit Connection Status -->
+    <div class="hud-pill connection-status-pill" id="connectionStatus">
+      <span class="status-dot"></span>
+      <span class="status-text" id="statusText">LiveKit Synced</span>
+    </div>
+  </header>
+
+  <!-- Floating Glass Dialogue Overlay (Teleprompter / Subtitles) -->
+  <main class="dialogue-hud-overlay" id="dialogueHud">
+    <div class="dialogue-hud-header">
+      <div class="hud-header-left">
+        <span class="hud-title">LIVE CONVERSATION</span>
+        <span class="turn-count" id="turnCount">0 turns</span>
+      </div>
+      <button class="btn-toggle-hud" id="btnToggleHud" title="Minimize / Expand Dialogue">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
+    </div>
+
+    <div class="conversation-stream" id="conversationStream">
+      <div class="empty-state" id="emptyState">
+        <p>Waiting for speech in <code>python -m voice_agent.main console</code>...</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom Console Sync Indicator -->
+  <footer class="hud-footer-hint">
+    <span>Synced live with <code>voice_agent.main console</code></span>
+  </footer>
+
+  <!-- Audio Elements for Lip-Sync -->
+  <audio id="ttsAudioPlayer" style="display:none;"></audio>
+
+  <!-- Core Scripts -->
+  <script src="avatar.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
